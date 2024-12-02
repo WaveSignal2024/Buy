@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wave Trading - Create Account</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <!-- Google API Script -->
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <button class="back-button" onclick="window.location.href='index.html';">
+                <i class="fas fa-arrow-left"></i> Back to Home
+            </button>
+            <h1>Markets, illuminated</h1>
+            <p>Create your account and get started with our exclusive TradingView strategy</p>
+        </div>
+    </header>
+
+    <section class="auth">
+        <div class="container">
+            <h2>Create your Wave Signal account</h2>
+            <div class="auth-options">
+                <!-- Google Sign Up Button -->
+                <button class="g-signin2 auth-button google" data-onsuccess="onSignUp">Sign up with Google</button>
+            </div>
+            <p>Already have an account? <a href="login.html">Login</a></p>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>© 2024 Wave Trading. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+
+    <script>
+        // Callback-Funktion nach erfolgreicher Registrierung mit Google
+        function onSignUp(googleUser) {
+            var profile = googleUser.getBasicProfile();
+            var id_token = googleUser.getAuthResponse().id_token;
+
+            console.log('ID Token: ' + id_token); // Zeigt das Token in der Konsole an (für die Registrierung)
+
+            // Sende das Token an deinen Server, um die Registrierung abzuschließen
+            fetch('/auth/google-signup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ token: id_token })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Erfolgreich registriert:', data);
+                window.location.href = 'dashboard.html'; // Weiterleitung nach erfolgreicher Registrierung
+            })
+            .catch(error => console.error('Fehler bei der Registrierung:', error));
+        }
+    </script>
+</body>
+</html>
